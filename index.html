@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harvest Bistro — Reservations & Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#2b2b2b">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">HB</div>
+      <div>
+        <h1>Restaurant Name</h1>
+        <p class="tagline">Sample Tagline</p>
+      </div>
+    </div>
+
+    <div class="contact">
+      <div class="phone">Call to book: <a href="tel:+1234567890">+1 (234) 567-890</a></div>
+      <nav class="main-nav" aria-label="Primary">
+        <a href="#menu">Menu</a>
+        <a href="#reservation">Reservations</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section id="menu" class="menu">
+    <h2>Menu</h2>
+    <div id="menuList" class="menu-grid" role="list"></div>
+  </section>
+
+  <section id="reservation" class="reservation">
+    <h2>Make a Reservation</h2>
+    <form id="reservationForm" aria-labelledby="reservation">
+      <div class="form-grid">
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="date" id="date" required />
+        <input type="time" id="time" required />
+        <input type="number" id="guests" placeholder="Number of Guests" min="1" required />
+      </div>
+      <div class="form-actions">
+        <button id="reserveBtn" type="submit">Reserve a Table</button>
+      </div>
+    </form>
+    <p id="confirmation" class="confirmation" role="status" aria-live="polite"></p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <small>&copy; <span id="year"></span> Harvest Bistro — 123 Main St • Open daily 11am–10pm</small>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+
