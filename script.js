@@ -35,7 +35,7 @@ const form = document.getElementById("reservationForm");
 const confirmation = document.getElementById("confirmation");
 const reserveBtn = document.getElementById("reserveBtn");
 
-form.addEventListener("submit", function(e) {
+form.addEventListener("submit", async function(e) {
   e.preventDefault();
   reserveBtn.disabled = true;
 
@@ -52,25 +52,38 @@ form.addEventListener("submit", function(e) {
     return;
   }
 
-  const reservation = {
-    name, email, date, time, guests, createdAt: new Date().toISOString()
-  };
+  const reservation = { name, email, date, time, guests };
 
-  // store a simple history in localStorage
-  const key = 'hb_reservations';
-  const existing = JSON.parse(localStorage.getItem(key) || "[]");
-  existing.push(reservation);
-  localStorage.setItem(key, JSON.stringify(existing));
+  // send to server endpoint
+  try {
+    const resp = await fetch('reserve.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: new URLSearchParams(reservation)
+    });
+    const data = await resp.json();
+    if (!data.ok) throw new Error(data.error || 'Server error');
 
-  confirmation.style.color = "";
-  confirmation.textContent = `Reservation confirmed for ${name} on ${date} at ${time} for ${guests} guest(s). We'll email confirmation to ${email}.`;
+    // optional local history
+    const key = 'hb_reservations';
+    const existing = JSON.parse(localStorage.getItem(key) || "[]");
+    existing.push({...reservation, createdAt: new Date().toISOString()});
+    localStorage.setItem(key, JSON.stringify(existing));
 
-  form.reset();
-  setTimeout(() => {
-    confirmation.textContent = "";
-  }, 8000);
+    confirmation.style.color = "";
+    confirmation.textContent = `Reservation confirmed for ${name} on ${date} at ${time} for ${guests} guest(s). We'll email confirmation to ${email}.`;
 
-  reserveBtn.disabled = false;
+    form.reset();
+    setTimeout(() => { confirmation.textContent = ""; }, 8000);
+  } catch (err) {
+    confirmation.style.color = "crimson";
+    confirmation.textContent = err.message || 'Unable to submit reservation.';
+  } finally {
+    reserveBtn.disabled = false;
+  }
 });
 
 // small helpers
