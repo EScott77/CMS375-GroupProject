@@ -1,4 +1,3 @@
-<?php
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +16,7 @@
 // server-side menu: keep in sync with client if needed
 $menuItems = [
   ['name'=>'Burger','price'=>10,'category'=>'Main'],
+  ['name'=>'Pizza','price'=>12,'category'=>'Main'],
   ['name'=>'Salad','price'=>8,'category'=>'Appetizer'],
   ['name'=>'Pasta','price'=>11,'category'=>'Main'],
 ];
