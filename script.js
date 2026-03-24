@@ -1,90 +1,35 @@
-// ========================= script.js =========================
-
-const menuItems = [
-  { name: "Burger", price: 10, category: "Main" },
-  { name: "Pizza", price: 12, category: "Main" },
-  { name: "Salad", price: 8, category: "Appetizer" },
-  { name: "Pasta", price: 11, category: "Main" }
-];
-
-const menuList = document.getElementById("menuList");
-
-function formatPrice(amount) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-}
-
-function displayMenu() {
-  menuList.innerHTML = "";
-  menuItems.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "menu-item";
-    div.setAttribute('role', 'listitem');
-    div.innerHTML = `
-      <h3>${item.name} <span class="price">${formatPrice(item.price)}</span></h3>
-      <p>Delicious ${item.name.toLowerCase()} prepared fresh to order.</p>
-      <span class="category">${item.category}</span>
-    `;
-    menuList.appendChild(div);
-  });
-}
-
-displayMenu();
-
-// RESERVATION FORM
 const form = document.getElementById("reservationForm");
 const confirmation = document.getElementById("confirmation");
 const reserveBtn = document.getElementById("reserveBtn");
 
-form.addEventListener("submit", async function(e) {
-  e.preventDefault();
-  reserveBtn.disabled = true;
+if (form && confirmation && reserveBtn) {
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    reserveBtn.disabled = true;
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const date = document.getElementById("date").value;
-  const time = document.getElementById("time").value;
-  const guests = parseInt(document.getElementById("guests").value, 10) || 1;
+    try {
+      const response = await fetch("reserve.php", {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: new FormData(form)
+      });
 
-  if (!name || !email || !date || !time || guests < 1) {
-    confirmation.textContent = "Please complete all fields with valid values.";
-    confirmation.style.color = "crimson";
-    reserveBtn.disabled = false;
-    return;
-  }
+      const data = await response.json();
 
-  const reservation = { name, email, date, time, guests };
+      if (!data.ok) {
+        throw new Error(data.error || "Unable to create reservation.");
+      }
 
-  // send to server endpoint
-  try {
-    const resp = await fetch('reserve.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: new URLSearchParams(reservation)
-    });
-    const data = await resp.json();
-    if (!data.ok) throw new Error(data.error || 'Server error');
-
-    // optional local history
-    const key = 'hb_reservations';
-    const existing = JSON.parse(localStorage.getItem(key) || "[]");
-    existing.push({...reservation, createdAt: new Date().toISOString()});
-    localStorage.setItem(key, JSON.stringify(existing));
-
-    confirmation.style.color = "";
-    confirmation.textContent = `Reservation confirmed for ${name} on ${date} at ${time} for ${guests} guest(s). We'll email confirmation to ${email}.`;
-
-    form.reset();
-    setTimeout(() => { confirmation.textContent = ""; }, 8000);
-  } catch (err) {
-    confirmation.style.color = "crimson";
-    confirmation.textContent = err.message || 'Unable to submit reservation.';
-  } finally {
-    reserveBtn.disabled = false;
-  }
-});
-
-// small helpers
-document.getElementById('year').textContent = new Date().getFullYear();
+      confirmation.textContent = `${data.message} Reservation #${data.data.reservation_id}.`;
+      confirmation.classList.remove("error-text");
+      form.reset();
+    } catch (error) {
+      confirmation.textContent = error.message;
+      confirmation.classList.add("error-text");
+    } finally {
+      reserveBtn.disabled = false;
+    }
+  });
+}
