@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS restaurant_db;
+USE restaurant_db;
+
+CREATE TABLE IF NOT EXISTS reservations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  reservation_date DATE NOT NULL,
+  reservation_time TIME NOT NULL,
+  guests INT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
