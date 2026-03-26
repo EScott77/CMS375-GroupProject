@@ -14,6 +14,19 @@ $menuStmt = db()->query(
 $menuItems = $menuStmt->fetchAll();
 
 $featuredItems = array_slice($menuItems, 0, 3);
+$featuredImages = [
+  'images/springSalad.jpg',
+  'images/darkChoc.jpg',
+  'images/braisedSalmon.jpg',
+];
+$menuImages = [
+  'harvest burger' => 'images/burger.jpg',
+  'wood-fired pizza' => 'images/pizza.jpg',
+  'spring salad' => 'images/springSalad.jpg',
+  'braised pasta' => 'images/pasta.jpg',
+  'roasted salmon' => 'images/braisedSalmon.jpg',
+  'chocolate torte' => 'images/darkChoc.jpg',
+];
 
 $lookupResults = [];
 if ($lookupEmail !== '' && filter_var($lookupEmail, FILTER_VALIDATE_EMAIL)) {
@@ -179,11 +192,7 @@ function menu_filter_slug(string $category): string {
           <?php foreach ($featuredItems as $index => $item): ?>
             <article class="featured-card">
               <img
-                src="<?= e([
-                  'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80',
-                  'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80',
-                  'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=900&q=80'
-                ][$index] ?? 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80') ?>"
+                src="<?= e($featuredImages[$index] ?? 'images/springSalad.jpg') ?>"
                 alt="<?= e($item['name']) ?>"
               />
               <div class="featured-card-content">
@@ -218,16 +227,11 @@ function menu_filter_slug(string $category): string {
         <div id="menuList" class="menu-grid" role="list" aria-label="Menu items">
           <?php foreach ($menuItems as $item): ?>
             <?php $filterSlug = menu_filter_slug($item['category']); ?>
+            <?php $menuImage = $menuImages[strtolower($item['name'])] ?? 'images/springSalad.jpg'; ?>
             <article class="menu-card" role="listitem" data-category="<?= e($filterSlug) ?>">
               <img
                 class="menu-card-image"
-                src="<?= e(match ($filterSlug) {
-                  'appetizer' => 'https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&w=900&q=80',
-                  'main' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80',
-                  'dessert' => 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=80',
-                  'drinks' => 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80',
-                  default => 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80',
-                }) ?>"
+                src="<?= e($menuImage) ?>"
                 alt="<?= e($item['name']) ?>"
               />
               <div class="menu-card-content">
