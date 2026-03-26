@@ -146,3 +146,12 @@ INSERT INTO menu_item_orders (menu_item_id, reservation_id, quantity, ordered_at
   CONCAT(CURDATE(), ' 12:30:00'),
   (SELECT staff_id FROM staff_accounts WHERE email = 'admin@harvestbistro.test' LIMIT 1)
 );
+
+
+select * from customers; 
+select * from menu_items;
+select * from reservations; 
+select * from staff_accounts; 
+select * from customers;
+
+
