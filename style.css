@@ -690,6 +690,11 @@ th {
   text-decoration: none;
 }
 
+.footer-note {
+  color: rgba(239, 233, 227, 0.72);
+  font-size: 0.95rem;
+}
+
 .footer-links a:hover {
   color: var(--gold);
 }

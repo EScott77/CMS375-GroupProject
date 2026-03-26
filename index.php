@@ -493,7 +493,7 @@ function menu_filter_slug(string $category): string {
       <div class="footer-links">
         <h4>Admin</h4>
         <a href="login.php">Admin Login</a>
-        <a href="staff.php">Staff Dashboard</a>
+        <span class="footer-note">Staff and admin dashboards are available after login.</span>
       </div>
     </div>
 
