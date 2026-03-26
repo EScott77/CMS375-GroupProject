@@ -1,6 +1,32 @@
+const menuList = document.getElementById("menuList");
+const filterPills = document.querySelectorAll(".filter-pill");
 const form = document.getElementById("reservationForm");
 const confirmation = document.getElementById("confirmation");
 const reserveBtn = document.getElementById("reserveBtn");
+const year = document.getElementById("year");
+
+filterPills.forEach((pill) => {
+  pill.addEventListener("click", () => {
+    filterPills.forEach((button) => button.classList.remove("active"));
+    pill.classList.add("active");
+
+    if (!menuList) {
+      return;
+    }
+
+    const filter = pill.dataset.filter || "all";
+    const items = menuList.querySelectorAll("[data-category]");
+
+    items.forEach((item) => {
+      const isVisible = filter === "all" || item.dataset.category === filter;
+      item.style.display = isVisible ? "" : "none";
+    });
+  });
+});
+
+if (year) {
+  year.textContent = new Date().getFullYear();
+}
 
 if (form && confirmation && reserveBtn) {
   form.addEventListener("submit", async (event) => {
