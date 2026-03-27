@@ -14,6 +14,12 @@ $menuStmt = db()->query(
 $menuItems = $menuStmt->fetchAll();
 
 $featuredItems = array_slice($menuItems, 0, 3);
+$displayPhotos = [
+  'images/restaurant.jpg',
+  'images/restaurant.jpg',
+  'images/restaurant.jpg',
+];
+
 $featuredImages = [
   'images/springSalad.jpg',
   'images/darkChoc.jpg',
@@ -151,20 +157,20 @@ function menu_filter_slug(string $category): string {
         <div class="hero-visual">
           <div class="hero-image-card large-image">
             <img
-              src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+              src="<?= e($displayPhotos[0] ?? 'images/restaurant.jpg') ?>"
               alt="Elegant restaurant interior with warm lighting"
             />
           </div>
           <div class="hero-image-row">
             <div class="hero-image-card small-image">
               <img
-                src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=900&q=80"
+                src="<?= e($displayPhotos[1] ?? 'images/restaurant.jpg') ?>"
                 alt="Plated gourmet dish"
               />
             </div>
             <div class="hero-image-card small-image">
               <img
-                src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=80"
+                src="<?= e($displayPhotos[2] ?? 'images/restaurant.jpg') ?>"
                 alt="Restaurant table setup with food and drinks"
               />
             </div>
