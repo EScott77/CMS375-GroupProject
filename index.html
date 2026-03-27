@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harvest Bistro — Reservations & Menu Management</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <meta name="theme-color" content="#1f1b18" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Top Info Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <p>Open Daily: 11:00 AM – 10:00 PM</p>
+      <p>123 Main St, Orlando, FL</p>
+      <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="brand" aria-label="Harvest Bistro home">
+        <div class="logo" aria-hidden="true">HB</div>
+        <div class="brand-copy">
+          <h1>Harvest Bistro</h1>
+          <p class="tagline">Seasonal dining, seamless reservations, smarter restaurant management</p>
+        </div>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary Navigation">
+        <a href="#home">Home</a>
+        <a href="#featured">Featured</a>
+        <a href="#menu">Menu</a>
+        <a href="#reservation">Reservations</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <a href="#reservation" class="nav-cta">Book a Table</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="eyebrow">Restaurant Reservation & Menu Management System</span>
+          <h2>Beautiful dining experience, powered by a smart database system.</h2>
+          <p class="hero-text">
+            Harvest Bistro combines elegant restaurant presentation with practical reservation and
+            menu management features. Customers can explore dishes, reserve tables online, and
+            enjoy a smooth dining experience, while staff can manage operations efficiently.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#menu" class="btn btn-primary">Explore Menu</a>
+            <a href="#reservation" class="btn btn-secondary">Reserve Now</a>
+          </div>
+
+          <div class="hero-highlights">
+            <div class="highlight-card">
+              <strong>Fresh Menu</strong>
+              <span>Seasonal dishes and chef specials</span>
+            </div>
+            <div class="highlight-card">
+              <strong>Easy Booking</strong>
+              <span>Fast online reservations</span>
+            </div>
+            <div class="highlight-card">
+              <strong>Smart Management</strong>
+              <span>Built for restaurant operations</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-image-card large-image">
+            <img
+              src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+              alt="Elegant restaurant interior with warm lighting"
+            />
+          </div>
+          <div class="hero-image-row">
+            <div class="hero-image-card small-image">
+              <img
+                src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=900&q=80"
+                alt="Plated gourmet dish"
+              />
+            </div>
+            <div class="hero-image-card small-image">
+              <img
+                src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=80"
+                alt="Restaurant table setup with food and drinks"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Dishes -->
+    <section id="featured" class="featured-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">Featured Favorites</span>
+          <h2>Signature dishes guests keep coming back for</h2>
+          <p>
+            A quick preview of the kind of elevated, fresh, and inviting menu experience your system can display.
+          </p>
+        </div>
+
+        <div class="featured-grid">
+          <article class="featured-card">
+            <img
+              src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+              alt="Grilled salmon with vegetables"
+            />
+            <div class="featured-card-content">
+              <span class="badge">Chef Pick</span>
+              <h3>Herb-Grilled Salmon</h3>
+              <p>Fresh Atlantic salmon with seasonal vegetables and lemon butter glaze.</p>
+            </div>
+          </article>
+
+          <article class="featured-card">
+            <img
+              src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80"
+              alt="Artisan flatbread"
+            />
+            <div class="featured-card-content">
+              <span class="badge">Popular</span>
+              <h3>Rustic Garden Flatbread</h3>
+              <p>Crisp artisan base topped with roasted vegetables, mozzarella, and basil oil.</p>
+            </div>
+          </article>
+
+          <article class="featured-card">
+            <img
+              src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=900&q=80"
+              alt="Dessert plated beautifully"
+            />
+            <div class="featured-card-content">
+              <span class="badge">Dessert</span>
+              <h3>Vanilla Bean Tart</h3>
+              <p>A light, elegant finish with fresh berries and whipped mascarpone cream.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Menu Preview / Dynamic Menu -->
+    <section id="menu" class="menu-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">Menu</span>
+          <h2>Browse our menu</h2>
+          <p>
+            This section is connected to your restaurant menu system and is ready for dynamic dish rendering.
+          </p>
+        </div>
+
+        <div class="menu-toolbar">
+          <button type="button" class="filter-pill active">All</button>
+          <button type="button" class="filter-pill">Appetizers</button>
+          <button type="button" class="filter-pill">Main Courses</button>
+          <button type="button" class="filter-pill">Desserts</button>
+          <button type="button" class="filter-pill">Drinks</button>
+        </div>
+
+        <!-- KEEP THIS ID for database / JS rendering -->
+        <div id="menuList" class="menu-grid" role="list" aria-label="Menu items"></div>
+      </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section id="reservation" class="reservation-section">
+      <div class="container reservation-grid">
+        <div class="reservation-copy">
+          <span class="section-label">Reservations</span>
+          <h2>Reserve your table in seconds</h2>
+          <p>
+            This form keeps your original structure so it can stay tied to your database logic.
+            Guests can submit their reservation details, and your system can process them directly.
+          </p>
+
+          <div class="reservation-info-cards">
+            <div class="info-card">
+              <h3>Dining Hours</h3>
+              <p>Monday – Sunday</p>
+              <p>11:00 AM – 10:00 PM</p>
+            </div>
+
+            <div class="info-card">
+              <h3>Reservation Notes</h3>
+              <p>For parties over 8, please contact us directly.</p>
+              <p>Walk-ins are welcome based on availability.</p>
+            </div>
+
+            <div class="info-card">
+              <h3>Why Book Online?</h3>
+              <p>Fast confirmation, fewer errors, and easy guest tracking through the database.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reservation-form-card">
+          <h3>Make a Reservation</h3>
+
+          <!-- KEEP THIS FORM + IDs because it's tied to your DB -->
+          <form id="reservationForm" aria-labelledby="reservation">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="Your Name" required />
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Email" required />
+              </div>
+
+              <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" required />
+              </div>
+
+              <div class="form-group">
+                <label for="time">Time</label>
+                <input type="time" id="time" required />
+              </div>
+
+              <div class="form-group full-width">
+                <label for="guests">Number of Guests</label>
+                <input
+                  type="number"
+                  id="guests"
+                  placeholder="Number of Guests"
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button id="reserveBtn" type="submit" class="btn btn-primary full-btn">
+                Reserve a Table
+              </button>
+            </div>
+          </form>
+
+          <!-- KEEP THIS ID for confirmation from JS -->
+          <p id="confirmation" class="confirmation" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about-section">
+      <div class="container about-grid">
+        <div class="about-image">
+          <img
+            src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80"
+            alt="Restaurant table with elegant dishes"
+          />
+        </div>
+
+        <div class="about-content">
+          <span class="section-label">About Harvest Bistro</span>
+          <h2>A restaurant concept designed for both guests and management</h2>
+          <p>
+            Harvest Bistro is a modern restaurant website concept built for a database systems project.
+            It is designed to show how menu management, reservations, and restaurant operations can work
+            together in one clean digital experience.
+          </p>
+          <p>
+            On the front end, customers get a polished restaurant site with food visuals, menu browsing,
+            and reservation booking. On the back end, the database can support reservation storage, menu
+            updates, customer details, and operational management.
+          </p>
+
+          <div class="about-points">
+            <div class="about-point">
+              <strong>Customer Experience</strong>
+              <p>Simple menu browsing and reservation booking.</p>
+            </div>
+            <div class="about-point">
+              <strong>Database Integration</strong>
+              <p>Reservation and menu data can be tied directly to your system.</p>
+            </div>
+            <div class="about-point">
+              <strong>Professional Presentation</strong>
+              <p>Looks like a real restaurant brand, not just a class assignment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact / Location -->
+    <section id="contact" class="contact-section">
+      <div class="container">
+        <div class="section-heading center">
+          <span class="section-label">Visit Us</span>
+          <h2>Location, hours, and contact</h2>
+          <p>Everything guests need to plan their visit at a glance.</p>
+        </div>
+
+        <div class="contact-grid">
+          <article class="contact-card">
+            <h3>Address</h3>
+            <p>123 Main St</p>
+            <p>Orlando, FL 32801</p>
+          </article>
+
+          <article class="contact-card">
+            <h3>Hours</h3>
+            <p>Mon – Sun</p>
+            <p>11:00 AM – 10:00 PM</p>
+          </article>
+
+          <article class="contact-card">
+            <h3>Contact</h3>
+            <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+            <p><a href="mailto:hello@harvestbistro.com">hello@harvestbistro.com</a></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Optional Dashboard Preview -->
+    <section class="dashboard-preview">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">System Preview</span>
+          <h2>What the full restaurant management platform can support</h2>
+          <p>
+            You said the database side is already ready, so this website is designed to visually support
+            features like these as part of your overall restaurant management system.
+          </p>
+        </div>
+
+        <div class="dashboard-preview-grid">
+          <article class="dashboard-card">
+            <h3>Reservation Management</h3>
+            <p>Store guest bookings, check availability, and manage reservation records.</p>
+          </article>
+
+          <article class="dashboard-card">
+            <h3>Menu Management</h3>
+            <p>Update dishes, categories, pricing, and availability from the database.</p>
+          </article>
+
+          <article class="dashboard-card">
+            <h3>Operational Insights</h3>
+            <p>Track trends, popular dishes, and reservation activity through reports.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo" aria-hidden="true">HB</div>
+        <div>
+          <h3>Harvest Bistro</h3>
+          <p>Seasonal dining with smart reservation and menu management.</p>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <a href="#home">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#reservation">Reservations</a>
+        <a href="#about">About</a>
+      </div>
+
+      <div class="footer-links">
+        <h4>Contact</h4>
+        <a href="tel:+1234567890">+1 (234) 567-890</a>
+        <a href="mailto:hello@harvestbistro.com">hello@harvestbistro.com</a>
+        <span>123 Main St, Orlando, FL</span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <small>&copy; <span id="year"></span> Harvest Bistro — Restaurant Reservation & Menu Management System</small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
