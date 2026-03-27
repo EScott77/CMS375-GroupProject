@@ -118,12 +118,11 @@ function menu_filter_slug(string $category): string {
     <section id="home" class="hero">
       <div class="container hero-grid">
         <div class="hero-content">
-          <span class="eyebrow">Restaurant Reservation & Menu Management System</span>
-          <h2>Beautiful dining experience, powered by a smart database system.</h2>
+          <span class="eyebrow">Restaurant Reservation & Viewable Menu for Bistro</span>
+          <h2>Beautiful dining experience.</h2>
           <p class="hero-text">
-            Harvest Bistro combines elegant restaurant presentation with practical reservation and
-            menu management features. Customers can explore dishes, reserve tables online, and
-            enjoy a smooth dining experience, while staff and admins can manage operations efficiently.
+            Harvest Bistro provides elegant restaurant presentation. Customers can explore dishes, reserve tables online, and
+            enjoy a smooth dining experience.
           </p>
 
           <div class="hero-actions">
@@ -136,13 +135,15 @@ function menu_filter_slug(string $category): string {
               <strong>Fresh Menu</strong>
               <span>Seasonal dishes and chef specials</span>
             </div>
-            <div class="highlight-card">
+            <!-- 
+<div class="highlight-card">
               <strong>Easy Booking</strong>
               <span>Fast online reservations</span>
             </div>
+ -->
             <div class="highlight-card">
-              <strong>Smart Management</strong>
-              <span>Admin analytics and staff workflows</span>
+              <strong>Easy Reservations</strong>
+              <span>Book your reservation in minutes.</span>
             </div>
           </div>
         </div>
@@ -184,7 +185,7 @@ function menu_filter_slug(string $category): string {
           <span class="section-label">Featured Favorites</span>
           <h2>Signature dishes guests keep coming back for</h2>
           <p>
-            A quick preview of the elevated menu experience your system can display using live database data.
+            A quick preview of our sophisticated menu. 
           </p>
         </div>
 
@@ -211,9 +212,11 @@ function menu_filter_slug(string $category): string {
         <div class="section-heading">
           <span class="section-label">Menu</span>
           <h2>Browse our menu</h2>
-          <p>
+         <!-- 
+ <p>
             This section is connected to your database-driven menu items and supports quick category filtering.
           </p>
+ -->
         </div>
 
         <div class="menu-toolbar" aria-label="Menu filters">
@@ -257,8 +260,7 @@ function menu_filter_slug(string $category): string {
           <span class="section-label">Reservations</span>
           <h2>Reserve your table in seconds</h2>
           <p>
-            This form stays connected to your PHP and MySQL reservation flow, so guests can submit details
-            directly into the system.
+            Submit your information for a fast, easy, and free booking. 
           </p>
 
           <div class="reservation-info-cards">
@@ -276,7 +278,7 @@ function menu_filter_slug(string $category): string {
 
             <div class="info-card">
               <h3>Why Book Online?</h3>
-              <p>Fast confirmation, fewer errors, and better tracking through the database.</p>
+              <p>Fast and secure confirmation.</p>
             </div>
           </div>
         </div>
@@ -412,12 +414,10 @@ function menu_filter_slug(string $category): string {
           <span class="section-label">About Harvest Bistro</span>
           <h2>A restaurant concept designed for both guests and management</h2>
           <p>
-            Harvest Bistro is a modern restaurant concept for a database systems project. It brings menu
-            browsing, reservations, and operational management together in one polished experience.
+            Harvest Bistro is a modern restaurant located in Orlando, Florida. 
           </p>
           <p>
-            Customers get a welcoming front-end experience, while your PHP and SQL backend supports
-            reservations, menu updates, analytics, and role-based workflows.
+            Hear what our happy customers are saying. 
           </p>
 
           <div class="about-points">
@@ -425,13 +425,15 @@ function menu_filter_slug(string $category): string {
               <strong>Customer Experience</strong>
               <p>Simple menu browsing and reservation booking.</p>
             </div>
-            <div class="about-point">
+       <!-- 
+     <div class="about-point">
               <strong>Database Integration</strong>
               <p>Reservation and menu data tie directly into MySQL.</p>
             </div>
+ -->
             <div class="about-point">
-              <strong>Professional Presentation</strong>
-              <p>Feels like a real restaurant brand rather than a basic class mockup.</p>
+              <strong>Admin Controls</strong>
+              <p>Part of our staff? View your information below.</p>
             </div>
           </div>
         </div>
