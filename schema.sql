@@ -94,7 +94,12 @@ INSERT INTO menu_items (name, description, price, category, availability_status)
 ('Spring Salad', 'Citrus greens, goat cheese, candied pecans, and vinaigrette.', 12.00, 'Appetizer', 'available'),
 ('Braised Pasta', 'Fresh pasta with slow-braised beef ragu and parmesan.', 19.00, 'Main', 'available'),
 ('Roasted Salmon', 'Lemon dill salmon with fingerling potatoes.', 24.00, 'Entree', 'available'),
-('Chocolate Torte', 'Dark chocolate torte with whipped cream and sea salt.', 9.00, 'Dessert', 'available');
+('Chocolate Torte', 'Dark chocolate torte with whipped cream and sea salt.', 9.00, 'Dessert', 'available'),
+('Steak Frites', 'Grilled sirloin with herb butter and hand-cut fries.', 28.00, 'Main', 'available'), 
+('Vegetable Risotto', 'Creamy risotto with seasonal vegetables and parmesan', '17.00', 'Main', 'available'),
+('Seasonal Fruit Crisp', 'Warm fruit crumble with oat topping and vanilla ice cream.', '8.00', 'main', 'available'),
+('Caramel Bread Pudding', "House-made brioche with caramel sauce and whipped cream.", '9.00', 'Dessert', 'available'),
+('Herb-Roasted Chicken', 'Free-range chicken with garlic pan jus and roasted vegetables', '22.00', 'Entree', 'available');
 
 INSERT INTO customers (name, email, phone) VALUES
 ('Avery Johnson', 'avery@example.com', '555-0100'),
