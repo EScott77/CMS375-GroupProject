@@ -113,12 +113,14 @@ if ($action === 'record_order') {
   $menuItemId = (int) ($_POST['menu_item_id'] ?? 0);
   $reservationId = (int) ($_POST['reservation_id'] ?? 0);
   $quantity = (int) ($_POST['quantity'] ?? 0);
-  $orderedAt = trim($_POST['ordered_at'] ?? '');
+  $orderedTime = trim($_POST['ordered_time'] ?? '');
 
-  if ($menuItemId < 1 || $quantity < 1 || $orderedAt === '') {
-    flash('error', 'Order logs need a menu item, quantity, and order time.');
+  if ($menuItemId < 1 || $quantity < 1 || $orderedTime === '') {
+    flash('error', 'Order logs need a menu item, quantity, and time.');
     redirect('admin.php#order-analytics');
   }
+
+  $orderedAt = date('Y-m-d') . ' ' . $orderedTime . ':00';
 
   $stmt = db()->prepare(
     'INSERT INTO menu_item_orders (menu_item_id, reservation_id, quantity, ordered_at, recorded_by_staff_id)
@@ -128,7 +130,7 @@ if ($action === 'record_order') {
     ':menu_item_id' => $menuItemId,
     ':reservation_id' => $reservationId > 0 ? $reservationId : null,
     ':quantity' => $quantity,
-    ':ordered_at' => str_replace('T', ' ', $orderedAt) . ':00',
+    ':ordered_at' => $orderedAt,
     ':recorded_by_staff_id' => $user['staff_id'],
   ]);
 

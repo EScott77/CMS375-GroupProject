@@ -46,6 +46,14 @@ $hourlyOrders = db()->query(
    ORDER BY order_hour ASC'
 )->fetchAll();
 
+$hourlyItemOrders = db()->query(
+  'SELECT DATE_FORMAT(mio.ordered_at, "%H:00") AS order_hour, mi.name, SUM(mio.quantity) AS total_quantity
+   FROM menu_item_orders mio
+   JOIN menu_items mi ON mi.menu_item_id = mio.menu_item_id
+   GROUP BY order_hour, mi.menu_item_id, mi.name
+   ORDER BY order_hour ASC, mi.name ASC'
+)->fetchAll();
+
 $staffAccounts = db()->query(
   'SELECT staff_id, name, email, role, created_at
    FROM staff_accounts
@@ -82,6 +90,46 @@ foreach ($popularMenuItems as $item) {
 $maxHourlyCount = 1;
 foreach ($hourlyOrders as $hour) {
   $maxHourlyCount = max($maxHourlyCount, (int) $hour['total_quantity']);
+}
+
+$hourlyOrderChart = [];
+foreach ($hourlyItemOrders as $row) {
+  $hour = $row['order_hour'];
+  if (!isset($hourlyOrderChart[$hour])) {
+    $hourlyOrderChart[$hour] = [
+      'total' => 0,
+      'items' => [],
+    ];
+  }
+
+  $quantity = (int) $row['total_quantity'];
+  $hourlyOrderChart[$hour]['total'] += $quantity;
+  $hourlyOrderChart[$hour]['items'][] = [
+    'name' => $row['name'],
+    'quantity' => $quantity,
+  ];
+}
+
+$chartPalette = [
+  '#3b2419',
+  '#b98a4a',
+  '#7f5539',
+  '#6d7b40',
+  '#8f2d56',
+  '#3a6ea5',
+  '#d17b49',
+  '#5b8c5a',
+];
+
+$itemColorMap = [];
+$paletteIndex = 0;
+foreach ($hourlyOrderChart as $hourData) {
+  foreach ($hourData['items'] as $itemData) {
+    if (!isset($itemColorMap[$itemData['name']])) {
+      $itemColorMap[$itemData['name']] = $chartPalette[$paletteIndex % count($chartPalette)];
+      $paletteIndex++;
+    }
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -212,8 +260,8 @@ foreach ($hourlyOrders as $hour) {
             <input type="number" name="quantity" min="1" value="1" required />
           </label>
           <label>
-            <span>Ordered at</span>
-            <input type="datetime-local" name="ordered_at" required />
+            <span>Ordered time</span>
+            <input type="time" name="ordered_time" required />
           </label>
           <button type="submit">Record Order</button>
         </form>
@@ -233,6 +281,54 @@ foreach ($hourlyOrders as $hour) {
             <?php endforeach; ?>
           </div>
         </div>
+      </div>
+
+      <div class="panel inset-panel hourly-columns-panel">
+        <p class="eyebrow">Orders By Item And Hour</p>
+        <h3>Hourly dish volume</h3>
+        <?php if ($hourlyOrderChart !== []): ?>
+          <div class="hourly-columns-chart">
+            <div class="hourly-columns-plot">
+              <?php foreach ($hourlyOrderChart as $hour => $hourData): ?>
+                <div class="hour-column-wrap">
+                  <div class="hour-column-total"><?= e((string) $hourData['total']) ?></div>
+                  <?php $columnHeight = max(10, (int) round(($hourData['total'] / max(1, $maxHourlyCount)) * 100)); ?>
+                  <div
+                    class="hour-column"
+                    style="height: <?= e((string) $columnHeight) ?>%;"
+                    aria-label="<?= e($hour) ?> had <?= e((string) $hourData['total']) ?> total dish orders"
+                  >
+                    <?php foreach ($hourData['items'] as $itemData): ?>
+                      <?php
+                      $segmentHeight = max(
+                        12,
+                        (int) round(($itemData['quantity'] / max(1, $hourData['total'])) * 100)
+                      );
+                      ?>
+                      <div
+                        class="hour-column-segment"
+                        style="height: <?= e((string) $segmentHeight) ?>%; background: <?= e($itemColorMap[$itemData['name']]) ?>;"
+                        title="<?= e($itemData['name']) ?>: <?= e((string) $itemData['quantity']) ?>"
+                      ></div>
+                    <?php endforeach; ?>
+                  </div>
+                  <div class="hour-column-label"><?= e($hour) ?></div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+
+            <div class="chart-legend">
+              <?php foreach ($itemColorMap as $itemName => $color): ?>
+                <div class="chart-legend-item">
+                  <span class="chart-legend-swatch" style="background: <?= e($color) ?>;"></span>
+                  <span><?= e($itemName) ?></span>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        <?php else: ?>
+          <p class="muted-text">No order data has been recorded yet.</p>
+        <?php endif; ?>
       </div>
 
       <div class="table-wrap analytics-table">
