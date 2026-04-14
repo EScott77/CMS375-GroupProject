@@ -18,10 +18,6 @@ $menuImages = [
   'chocolate torte' => 'images/darkChoc.jpg',
 ];
 
-function e(string $value): string {
-  return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-}
-
 function menu_category_label(string $category): string {
   $normalized = strtolower(trim($category));
   return match ($normalized) {
