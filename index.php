@@ -41,18 +41,6 @@ if ($lookupEmail !== '' && filter_var($lookupEmail, FILTER_VALIDATE_EMAIL)) {
   $lookupStmt->execute([':email' => $lookupEmail]);
   $lookupResults = $lookupStmt->fetchAll();
 }
-
-function reservation_status_badge(string $status): string {
-  return match ($status) {
-    'confirmed' => 'badge-confirmed',
-    'cancelled' => 'badge-cancelled',
-    default => 'badge-pending',
-  };
-}
-
-function e(string $value): string {
-  return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
