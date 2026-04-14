@@ -169,7 +169,7 @@ function e(string $value): string {
       </div>
     </section>
 
-    <!-- MENU SECTION REMOVED -->
+    <!-- ⭐ MENU SECTION REMOVED COMPLETELY ⭐ -->
 
     <section id="reservation" class="reservation-section">
       <div class="container reservation-grid">
