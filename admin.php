@@ -92,14 +92,29 @@ foreach ($hourlyOrders as $hour) {
   $maxHourlyCount = max($maxHourlyCount, (int) $hour['total_quantity']);
 }
 
+$allowedOrderTimes = [];
+for ($hour = 11; $hour <= 21; $hour++) {
+  $timeValue = sprintf('%02d:00', $hour);
+  $timeLabel = date('g:i A', strtotime($timeValue));
+  $allowedOrderTimes[] = [
+    'value' => $timeValue,
+    'label' => $timeLabel,
+  ];
+}
+
 $hourlyOrderChart = [];
+for ($hour = 11; $hour <= 21; $hour++) {
+  $hourKey = sprintf('%02d:00', $hour);
+  $hourlyOrderChart[$hourKey] = [
+    'total' => 0,
+    'items' => [],
+  ];
+}
+
 foreach ($hourlyItemOrders as $row) {
   $hour = $row['order_hour'];
   if (!isset($hourlyOrderChart[$hour])) {
-    $hourlyOrderChart[$hour] = [
-      'total' => 0,
-      'items' => [],
-    ];
+    continue;
   }
 
   $quantity = (int) $row['total_quantity'];
@@ -130,6 +145,14 @@ foreach ($hourlyOrderChart as $hourData) {
       $paletteIndex++;
     }
   }
+}
+
+function format_hour_label(string $hourValue): string {
+  return date('g:i A', strtotime($hourValue));
+}
+
+function format_datetime_label(string $datetimeValue): string {
+  return date('M j, Y g:i A', strtotime($datetimeValue));
 }
 ?>
 <!DOCTYPE html>
@@ -187,7 +210,7 @@ foreach ($hourlyOrderChart as $hourData) {
         </div>
         <ul class="plain-list">
           <?php foreach ($peakHours as $hour): ?>
-            <li><?= e($hour['reservation_hour']) ?> - <?= e((string) $hour['total']) ?> reservations</li>
+            <li><?= e(format_hour_label($hour['reservation_hour'])) ?> - <?= e((string) $hour['total']) ?> reservations</li>
           <?php endforeach; ?>
         </ul>
       </article>
@@ -261,7 +284,12 @@ foreach ($hourlyOrderChart as $hourData) {
           </label>
           <label>
             <span>Ordered time</span>
-            <input type="time" name="ordered_time" required />
+            <select name="ordered_time" required>
+              <option value="">Select a time</option>
+              <?php foreach ($allowedOrderTimes as $timeOption): ?>
+                <option value="<?= e($timeOption['value']) ?>"><?= e($timeOption['label']) ?></option>
+              <?php endforeach; ?>
+            </select>
           </label>
           <button type="submit">Record Order</button>
         </form>
@@ -272,7 +300,7 @@ foreach ($hourlyOrderChart as $hourData) {
           <div class="chart-list">
             <?php foreach ($hourlyOrders as $hour): ?>
               <div class="chart-row">
-                <div class="chart-label"><?= e($hour['order_hour']) ?></div>
+                <div class="chart-label"><?= e(format_hour_label($hour['order_hour'])) ?></div>
                 <div class="chart-bar-shell">
                   <div class="chart-bar alt-bar" style="width: <?= e((string) max(10, (int) round(((int) $hour['total_quantity'] / $maxHourlyCount) * 100))) ?>%"></div>
                 </div>
@@ -293,26 +321,30 @@ foreach ($hourlyOrderChart as $hourData) {
                 <div class="hour-column-wrap">
                   <div class="hour-column-total"><?= e((string) $hourData['total']) ?></div>
                   <?php $columnHeight = max(10, (int) round(($hourData['total'] / max(1, $maxHourlyCount)) * 100)); ?>
-                  <div
-                    class="hour-column"
-                    style="height: <?= e((string) $columnHeight) ?>%;"
-                    aria-label="<?= e($hour) ?> had <?= e((string) $hourData['total']) ?> total dish orders"
-                  >
-                    <?php foreach ($hourData['items'] as $itemData): ?>
-                      <?php
-                      $segmentHeight = max(
-                        12,
-                        (int) round(($itemData['quantity'] / max(1, $hourData['total'])) * 100)
-                      );
-                      ?>
-                      <div
-                        class="hour-column-segment"
-                        style="height: <?= e((string) $segmentHeight) ?>%; background: <?= e($itemColorMap[$itemData['name']]) ?>;"
-                        title="<?= e($itemData['name']) ?>: <?= e((string) $itemData['quantity']) ?>"
-                      ></div>
-                    <?php endforeach; ?>
+                  <div class="hour-column-shell">
+                    <div
+                      class="hour-column"
+                      style="height: <?= e((string) $columnHeight) ?>%;"
+                      aria-label="<?= e($hour) ?> had <?= e((string) $hourData['total']) ?> total dish orders"
+                    >
+                      <?php foreach ($hourData['items'] as $itemData): ?>
+                        <?php
+                        $segmentHeight = max(
+                          12,
+                          (int) round(($itemData['quantity'] / max(1, $hourData['total'])) * 100)
+                        );
+                        ?>
+                        <div
+                          class="hour-column-segment"
+                          style="height: <?= e((string) $segmentHeight) ?>%; background: <?= e($itemColorMap[$itemData['name']]) ?>;"
+                          data-tooltip="<?= e($itemData['name']) ?>: <?= e((string) $itemData['quantity']) ?>"
+                          title="<?= e($itemData['name']) ?>: <?= e((string) $itemData['quantity']) ?>"
+                          tabindex="0"
+                        ></div>
+                      <?php endforeach; ?>
+                    </div>
                   </div>
-                  <div class="hour-column-label"><?= e($hour) ?></div>
+                  <div class="hour-column-label"><?= e(format_hour_label($hour)) ?></div>
                 </div>
               <?php endforeach; ?>
             </div>
@@ -347,7 +379,7 @@ foreach ($hourlyOrderChart as $hourData) {
               <tr>
                 <td><?= e($order['name']) ?></td>
                 <td><?= e((string) $order['quantity']) ?></td>
-                <td><?= e($order['ordered_at']) ?></td>
+                <td><?= e(format_datetime_label($order['ordered_at'])) ?></td>
                 <td><?= $order['reservation_id'] ? '#' . e((string) $order['reservation_id']) : 'Walk-in' ?></td>
                 <td><?= e($order['recorded_by'] ?? 'Unknown') ?></td>
               </tr>

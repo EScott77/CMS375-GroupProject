@@ -114,9 +114,13 @@ if ($action === 'record_order') {
   $reservationId = (int) ($_POST['reservation_id'] ?? 0);
   $quantity = (int) ($_POST['quantity'] ?? 0);
   $orderedTime = trim($_POST['ordered_time'] ?? '');
+  $allowedOrderTimes = [];
+  for ($hour = 11; $hour <= 21; $hour++) {
+    $allowedOrderTimes[] = sprintf('%02d:00', $hour);
+  }
 
-  if ($menuItemId < 1 || $quantity < 1 || $orderedTime === '') {
-    flash('error', 'Order logs need a menu item, quantity, and time.');
+  if ($menuItemId < 1 || $quantity < 1 || !in_array($orderedTime, $allowedOrderTimes, true)) {
+    flash('error', 'Order logs need a menu item, quantity, and an hourly time between 11:00 AM and 9:00 PM.');
     redirect('admin.php#order-analytics');
   }
 
