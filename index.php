@@ -72,7 +72,6 @@ if ($lookupEmail !== '' && filter_var($lookupEmail, FILTER_VALIDATE_EMAIL)) {
 
       <nav class="main-nav">
         <a href="#featured">Featured</a>
-        <a href="menu.php">Menu</a>
         <a href="#reservation">Reservations</a>
         <a href="#lookup">My Reservation</a>
         <a href="#about">About</a>
@@ -153,6 +152,10 @@ if ($lookupEmail !== '' && filter_var($lookupEmail, FILTER_VALIDATE_EMAIL)) {
               </div>
             </article>
           <?php endforeach; ?>
+        </div>
+
+        <div class="section-cta">
+          <a href="menu.php" class="btn btn-primary">View Full Menu</a>
         </div>
       </div>
     </section>

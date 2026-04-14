@@ -371,6 +371,12 @@ section {
   margin: 0;
 }
 
+.section-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.4rem;
+}
+
 .featured-grid {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
@@ -412,6 +418,14 @@ section {
 
 .menu-section {
   background: linear-gradient(180deg, rgba(237, 226, 211, 0.35), rgba(237, 226, 211, 0.15));
+}
+
+.menu-page-hero {
+  padding: 3rem 0 1.5rem;
+}
+
+.menu-page-section {
+  padding-top: 1rem;
 }
 
 .menu-toolbar {
