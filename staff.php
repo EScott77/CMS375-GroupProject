@@ -26,6 +26,18 @@ $menuItems = db()->query(
    FROM menu_items
    ORDER BY category, name'
 )->fetchAll();
+
+$menuCategories = [
+  'Appetizer',
+  'Main',
+  'Entree',
+  'Dessert',
+  'Drinks',
+];
+
+function format_staff_time(string $timeValue): string {
+  return date('g:i A', strtotime($timeValue));
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,7 +90,7 @@ $menuItems = db()->query(
           <tbody>
             <?php foreach ($reservations as $reservation): ?>
               <tr>
-                <td>#<?= e((string) $reservation['reservation_id']) ?><br><?= e($reservation['reservation_date']) ?> <?= e(substr($reservation['reservation_time'], 0, 5)) ?></td>
+                <td>#<?= e((string) $reservation['reservation_id']) ?><br><?= e($reservation['reservation_date']) ?> <?= e(format_staff_time($reservation['reservation_time'])) ?></td>
                 <td><?= e($reservation['customer_name']) ?><br><span class="muted-copy"><?= e($reservation['special_request']) ?></span></td>
                 <td><?= e($reservation['email']) ?></td>
                 <td><?= e((string) $reservation['guests']) ?></td>
@@ -129,6 +141,7 @@ $menuItems = db()->query(
                 <th>Category</th>
                 <th>Price</th>
                 <th>Status</th>
+                <th>Remove</th>
               </tr>
             </thead>
             <tbody>
@@ -138,6 +151,13 @@ $menuItems = db()->query(
                   <td><?= e($item['category']) ?></td>
                   <td>$<?= e(number_format((float) $item['price'], 2)) ?></td>
                   <td><?= e(ucfirst($item['availability_status'])) ?></td>
+                  <td>
+                    <form method="post" action="staff_actions.php" onsubmit="return confirm('Remove this menu item?');">
+                      <input type="hidden" name="action" value="delete_menu" />
+                      <input type="hidden" name="menu_item_id" value="<?= e((string) $item['menu_item_id']) ?>" />
+                      <button type="submit" class="danger-button">Delete</button>
+                    </form>
+                  </td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
@@ -147,8 +167,15 @@ $menuItems = db()->query(
         <form method="post" action="staff_actions.php" class="stack-form">
           <input type="hidden" name="action" value="update_menu" />
           <label>
-            <span>Existing menu item ID (optional)</span>
-            <input type="number" name="menu_item_id" min="1" placeholder="Leave blank to create new" />
+            <span>Existing menu item (optional)</span>
+            <select name="menu_item_id">
+              <option value="0">Create a new menu item</option>
+              <?php foreach ($menuItems as $item): ?>
+                <option value="<?= e((string) $item['menu_item_id']) ?>">
+                  <?= e($item['name']) ?> (<?= e($item['category']) ?>)
+                </option>
+              <?php endforeach; ?>
+            </select>
           </label>
           <label>
             <span>Name</span>
@@ -164,7 +191,12 @@ $menuItems = db()->query(
           </label>
           <label>
             <span>Category</span>
-            <input type="text" name="category" required />
+            <select name="category" required>
+              <option value="">Select a category</option>
+              <?php foreach ($menuCategories as $category): ?>
+                <option value="<?= e($category) ?>"><?= e($category) ?></option>
+              <?php endforeach; ?>
+            </select>
           </label>
           <label>
             <span>Status</span>

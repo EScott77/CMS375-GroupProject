@@ -79,6 +79,23 @@ if ($action === 'update_menu') {
   redirect('staff.php#menu-editor');
 }
 
+if ($action === 'delete_menu') {
+  $menuItemId = (int) ($_POST['menu_item_id'] ?? 0);
+
+  if ($menuItemId < 1) {
+    flash('error', 'Invalid menu item.');
+    redirect('staff.php#menu-editor');
+  }
+
+  $stmt = db()->prepare('DELETE FROM menu_items WHERE menu_item_id = :menu_item_id');
+  $stmt->execute([
+    ':menu_item_id' => $menuItemId,
+  ]);
+
+  flash('success', 'Menu item removed.');
+  redirect('staff.php#menu-editor');
+}
+
 if ($action === 'create_staff') {
   require_role(['admin']);
 
