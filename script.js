@@ -4,6 +4,12 @@ const form = document.getElementById("reservationForm");
 const confirmation = document.getElementById("confirmation");
 const reserveBtn = document.getElementById("reserveBtn");
 const year = document.getElementById("year");
+const menuItemSelect = document.getElementById("menu_item_id");
+const menuNameInput = document.getElementById("menu_name");
+const menuDescriptionInput = document.getElementById("menu_description");
+const menuPriceInput = document.getElementById("menu_price");
+const menuCategorySelect = document.getElementById("menu_category");
+const menuStatusSelect = document.getElementById("menu_status");
 
 filterPills.forEach((pill) => {
   pill.addEventListener("click", () => {
@@ -57,5 +63,33 @@ if (form && confirmation && reserveBtn) {
     } finally {
       reserveBtn.disabled = false;
     }
+  });
+}
+
+if (
+  menuItemSelect &&
+  menuNameInput &&
+  menuDescriptionInput &&
+  menuPriceInput &&
+  menuCategorySelect &&
+  menuStatusSelect
+) {
+  menuItemSelect.addEventListener("change", () => {
+    const selectedOption = menuItemSelect.options[menuItemSelect.selectedIndex];
+
+    if (!selectedOption || selectedOption.value === "0") {
+      menuNameInput.value = "";
+      menuDescriptionInput.value = "";
+      menuPriceInput.value = "";
+      menuCategorySelect.value = "";
+      menuStatusSelect.value = "available";
+      return;
+    }
+
+    menuNameInput.value = selectedOption.dataset.name || "";
+    menuDescriptionInput.value = selectedOption.dataset.description || "";
+    menuPriceInput.value = selectedOption.dataset.price || "";
+    menuCategorySelect.value = selectedOption.dataset.category || "";
+    menuStatusSelect.value = selectedOption.dataset.status || "available";
   });
 }

@@ -164,14 +164,21 @@ function format_staff_time(string $timeValue): string {
           </table>
         </div>
 
-        <form method="post" action="staff_actions.php" class="stack-form">
+        <form method="post" action="staff_actions.php" class="stack-form" id="menuEditorForm">
           <input type="hidden" name="action" value="update_menu" />
           <label>
             <span>Existing menu item (optional)</span>
-            <select name="menu_item_id">
+            <select name="menu_item_id" id="menu_item_id">
               <option value="0">Create a new menu item</option>
               <?php foreach ($menuItems as $item): ?>
-                <option value="<?= e((string) $item['menu_item_id']) ?>">
+                <option
+                  value="<?= e((string) $item['menu_item_id']) ?>"
+                  data-name="<?= e($item['name']) ?>"
+                  data-description="<?= e($item['description']) ?>"
+                  data-price="<?= e(number_format((float) $item['price'], 2, '.', '')) ?>"
+                  data-category="<?= e($item['category']) ?>"
+                  data-status="<?= e($item['availability_status']) ?>"
+                >
                   <?= e($item['name']) ?> (<?= e($item['category']) ?>)
                 </option>
               <?php endforeach; ?>
@@ -179,19 +186,19 @@ function format_staff_time(string $timeValue): string {
           </label>
           <label>
             <span>Name</span>
-            <input type="text" name="name" required />
+            <input type="text" name="name" id="menu_name" required />
           </label>
           <label>
             <span>Description</span>
-            <textarea name="description" rows="4" required></textarea>
+            <textarea name="description" id="menu_description" rows="4" required></textarea>
           </label>
           <label>
             <span>Price</span>
-            <input type="number" name="price" min="0.01" step="0.01" required />
+            <input type="number" name="price" id="menu_price" min="0.01" step="0.01" required />
           </label>
           <label>
             <span>Category</span>
-            <select name="category" required>
+            <select name="category" id="menu_category" required>
               <option value="">Select a category</option>
               <?php foreach ($menuCategories as $category): ?>
                 <option value="<?= e($category) ?>"><?= e($category) ?></option>
@@ -200,7 +207,7 @@ function format_staff_time(string $timeValue): string {
           </label>
           <label>
             <span>Status</span>
-            <select name="availability_status">
+            <select name="availability_status" id="menu_status">
               <option value="available">Available</option>
               <option value="unavailable">Unavailable</option>
             </select>
@@ -210,5 +217,6 @@ function format_staff_time(string $timeValue): string {
       </div>
     </section>
   </main>
+  <script src="script.js"></script>
 </body>
 </html>
