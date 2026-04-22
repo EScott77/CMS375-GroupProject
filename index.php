@@ -17,8 +17,8 @@ $featuredItems = array_slice($menuItems, 0, 3);
 
 $displayPhotos = [
   'images/restaurant.jpg',
-  'images/restaurant.jpg',
-  'images/restaurant.jpg',
+  'images/lighting.jpg',
+  'images/table.jpg',
 ];
 
 $featuredImages = [
