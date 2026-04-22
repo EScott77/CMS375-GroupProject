@@ -16,6 +16,11 @@ $menuImages = [
   'braised pasta' => 'images/pasta.jpg',
   'roasted salmon' => 'images/braisedSalmon.jpg',
   'chocolate torte' => 'images/darkChoc.jpg',
+  'steak frites' => 'images/steakFrites.jpg',
+  "vegetable risotto" => "images/vegetableRissoto.jpg",
+  'seasonal fruit crisp' => 'images/seasonalFruit.jpg',
+  'caramel bread pudding' => 'images/caramelBread.jpg',
+  'herd-roasted chicken' => 'images/roastedChicken.jpg',
 ];
 
 function menu_category_label_page(string $category): string {
