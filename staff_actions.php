@@ -42,7 +42,7 @@ if ($action === 'update_menu') {
 
   if ($name === '' || $description === '' || $price <= 0 || $category === '') {
     flash('error', 'Menu items need a name, description, price, and category.');
-    redirect('staff.php#menu-editor');
+    redirect('admin.php#menu-editor');
   }
 
   if ($menuItemId > 0) {
@@ -76,7 +76,7 @@ if ($action === 'update_menu') {
     flash('success', 'Menu item added.');
   }
 
-  redirect('staff.php#menu-editor');
+  redirect('admin.php#menu-editor');
 }
 
 if ($action === 'delete_menu') {
@@ -84,7 +84,7 @@ if ($action === 'delete_menu') {
 
   if ($menuItemId < 1) {
     flash('error', 'Invalid menu item.');
-    redirect('staff.php#menu-editor');
+    redirect('admin.php#menu-editor');
   }
 
   $stmt = db()->prepare('DELETE FROM menu_items WHERE menu_item_id = :menu_item_id');
@@ -93,7 +93,7 @@ if ($action === 'delete_menu') {
   ]);
 
   flash('success', 'Menu item removed.');
-  redirect('staff.php#menu-editor');
+  redirect('admin.php#menu-editor');
 }
 
 if ($action === 'create_staff') {
@@ -125,7 +125,7 @@ if ($action === 'create_staff') {
 }
 
 if ($action === 'record_order') {
-  require_role(['admin']);
+  require_role(['staff', 'admin']);
 
   $menuItemId = (int) ($_POST['menu_item_id'] ?? 0);
   $reservationId = (int) ($_POST['reservation_id'] ?? 0);
@@ -138,7 +138,7 @@ if ($action === 'record_order') {
 
   if ($menuItemId < 1 || $quantity < 1 || !in_array($orderedTime, $allowedOrderTimes, true)) {
     flash('error', 'Order logs need a menu item, quantity, and an hourly time between 11:00 AM and 9:00 PM.');
-    redirect('admin.php#order-analytics');
+    redirect('staff.php#record-orders');
   }
 
   $orderedAt = date('Y-m-d') . ' ' . $orderedTime . ':00';
@@ -156,7 +156,7 @@ if ($action === 'record_order') {
   ]);
 
   flash('success', 'Order record saved for analytics.');
-  redirect('admin.php#order-analytics');
+  redirect('staff.php#record-orders');
 }
 
 flash('error', 'Unsupported action.');

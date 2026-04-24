@@ -61,10 +61,18 @@ $staffAccounts = db()->query(
 )->fetchAll();
 
 $menuItems = db()->query(
-  'SELECT menu_item_id, name, category
+  'SELECT menu_item_id, name, description, price, category, availability_status
    FROM menu_items
    ORDER BY category, name'
 )->fetchAll();
+
+$menuCategories = [
+  'Appetizer',
+  'Main',
+  'Entree',
+  'Dessert',
+  'Drinks',
+];
 
 $reservations = db()->query(
   'SELECT reservation_id
@@ -168,7 +176,7 @@ function format_datetime_label(string $datetimeValue): string {
     <section class="dashboard-header">
       <div>
         <p class="eyebrow">Admin Dashboard</p>
-        <h1>Reporting and staff management</h1>
+        <h1>Management, analytics, and menu control</h1>
       </div>
       <div class="dashboard-links">
         <a class="ghost-button" href="staff.php">Staff Dashboard</a>
@@ -248,66 +256,29 @@ function format_datetime_label(string $datetimeValue): string {
           <?php endforeach; ?>
         </div>
       </article>
+
+      <article class="panel inset-panel">
+        <p class="eyebrow">Orders By Hour</p>
+        <h3>Service timeline</h3>
+        <div class="chart-list">
+          <?php foreach ($hourlyOrders as $hour): ?>
+            <div class="chart-row">
+              <div class="chart-label"><?= e(format_hour_label($hour['order_hour'])) ?></div>
+              <div class="chart-bar-shell">
+                <div class="chart-bar alt-bar" style="width: <?= e((string) max(10, (int) round(((int) $hour['total_quantity'] / $maxHourlyCount) * 100))) ?>%"></div>
+              </div>
+              <strong><?= e((string) $hour['total_quantity']) ?></strong>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </article>
     </section>
 
     <section id="order-analytics" class="panel">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Order Analytics</p>
-          <h2>Record dish orders and view service trends</h2>
-        </div>
-      </div>
-      <div class="grid dashboard-grid">
-        <form method="post" action="staff_actions.php" class="stack-form">
-          <input type="hidden" name="action" value="record_order" />
-          <label>
-            <span>Dish</span>
-            <select name="menu_item_id" required>
-              <option value="">Select a menu item</option>
-              <?php foreach ($menuItems as $item): ?>
-                <option value="<?= e((string) $item['menu_item_id']) ?>"><?= e($item['name']) ?> (<?= e($item['category']) ?>)</option>
-              <?php endforeach; ?>
-            </select>
-          </label>
-          <label>
-            <span>Reservation ID (optional)</span>
-            <select name="reservation_id">
-              <option value="0">Walk-in / no reservation</option>
-              <?php foreach ($reservations as $reservationId): ?>
-                <option value="<?= e((string) $reservationId) ?>">#<?= e((string) $reservationId) ?></option>
-              <?php endforeach; ?>
-            </select>
-          </label>
-          <label>
-            <span>Quantity</span>
-            <input type="number" name="quantity" min="1" value="1" required />
-          </label>
-          <label>
-            <span>Ordered time</span>
-            <select name="ordered_time" required>
-              <option value="">Select a time</option>
-              <?php foreach ($allowedOrderTimes as $timeOption): ?>
-                <option value="<?= e($timeOption['value']) ?>"><?= e($timeOption['label']) ?></option>
-              <?php endforeach; ?>
-            </select>
-          </label>
-          <button type="submit">Record Order</button>
-        </form>
-
-        <div class="panel inset-panel">
-          <p class="eyebrow">Orders By Hour</p>
-          <h3>Service timeline</h3>
-          <div class="chart-list">
-            <?php foreach ($hourlyOrders as $hour): ?>
-              <div class="chart-row">
-                <div class="chart-label"><?= e(format_hour_label($hour['order_hour'])) ?></div>
-                <div class="chart-bar-shell">
-                  <div class="chart-bar alt-bar" style="width: <?= e((string) max(10, (int) round(((int) $hour['total_quantity'] / $maxHourlyCount) * 100))) ?>%"></div>
-                </div>
-                <strong><?= e((string) $hour['total_quantity']) ?></strong>
-              </div>
-            <?php endforeach; ?>
-          </div>
+          <h2>View service trends and order performance</h2>
         </div>
       </div>
 
@@ -389,6 +360,98 @@ function format_datetime_label(string $datetimeValue): string {
       </div>
     </section>
 
+    <section id="menu-editor" class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Menu Editor</p>
+          <h2>Manage the live restaurant menu</h2>
+        </div>
+      </div>
+      <div class="grid dashboard-grid">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($menuItems as $item): ?>
+                <tr>
+                  <td><?= e($item['name']) ?></td>
+                  <td><?= e($item['category']) ?></td>
+                  <td>$<?= e(number_format((float) $item['price'], 2)) ?></td>
+                  <td><?= e(ucfirst($item['availability_status'])) ?></td>
+                  <td>
+                    <form method="post" action="staff_actions.php" onsubmit="return confirm('Remove this menu item?');">
+                      <input type="hidden" name="action" value="delete_menu" />
+                      <input type="hidden" name="menu_item_id" value="<?= e((string) $item['menu_item_id']) ?>" />
+                      <button type="submit" class="danger-button">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+
+        <form method="post" action="staff_actions.php" class="stack-form" id="menuEditorForm">
+          <input type="hidden" name="action" value="update_menu" />
+          <label>
+            <span>Existing menu item (optional)</span>
+            <select name="menu_item_id" id="menu_item_id">
+              <option value="0">Create a new menu item</option>
+              <?php foreach ($menuItems as $item): ?>
+                <option
+                  value="<?= e((string) $item['menu_item_id']) ?>"
+                  data-name="<?= e($item['name']) ?>"
+                  data-description="<?= e($item['description']) ?>"
+                  data-price="<?= e(number_format((float) $item['price'], 2, '.', '')) ?>"
+                  data-category="<?= e($item['category']) ?>"
+                  data-status="<?= e($item['availability_status']) ?>"
+                >
+                  <?= e($item['name']) ?> (<?= e($item['category']) ?>)
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </label>
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" id="menu_name" required />
+          </label>
+          <label>
+            <span>Description</span>
+            <textarea name="description" id="menu_description" rows="4" required></textarea>
+          </label>
+          <label>
+            <span>Price</span>
+            <input type="number" name="price" id="menu_price" min="0.01" step="0.01" required />
+          </label>
+          <label>
+            <span>Category</span>
+            <select name="category" id="menu_category" required>
+              <option value="">Select a category</option>
+              <?php foreach ($menuCategories as $category): ?>
+                <option value="<?= e($category) ?>"><?= e($category) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </label>
+          <label>
+            <span>Status</span>
+            <select name="availability_status" id="menu_status">
+              <option value="available">Available</option>
+              <option value="unavailable">Unavailable</option>
+            </select>
+          </label>
+          <button type="submit">Save Menu Item</button>
+        </form>
+      </div>
+    </section>
+
     <section id="staff-accounts" class="panel">
       <div class="section-heading">
         <div>
@@ -446,5 +509,6 @@ function format_datetime_label(string $datetimeValue): string {
       </div>
     </section>
   </main>
+  <script src="script.js"></script>
 </body>
 </html>

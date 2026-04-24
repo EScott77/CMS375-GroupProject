@@ -21,10 +21,18 @@ $displayPhotos = [
   'images/table.jpg',
 ];
 
-$featuredImages = [
-  'images/springSalad.jpg',
-  'images/darkChoc.jpg',
-  'images/braisedSalmon.jpg',
+$featuredImageMap = [
+  'harvest burger' => 'images/burger.jpg',
+  'wood-fired pizza' => 'images/pizza.jpg',
+  'spring salad' => 'images/springSalad.jpg',
+  'braised pasta' => 'images/pasta.jpg',
+  'roasted salmon' => 'images/braisedSalmon.jpg',
+  'chocolate torte' => 'images/darkChoc.jpg',
+  'steak frites' => 'images/steakFrites.jpg',
+  'vegetable risotto' => 'images/vegetableRissoto.jpg',
+  'seasonal fruit crisp' => 'images/seasonalFruit.jpg',
+  'caramel bread pudding' => 'images/caramelBread.jpg',
+  'herb-roasted chicken' => 'images/roastedChicken.jpg',
 ];
 
 $lookupResults = [];
@@ -141,8 +149,11 @@ if ($lookupEmail !== '' && filter_var($lookupEmail, FILTER_VALIDATE_EMAIL)) {
 
         <div class="featured-grid">
           <?php foreach ($featuredItems as $index => $item): ?>
+            <?php
+            $featuredImage = $featuredImageMap[strtolower($item['name'])] ?? $displayPhotos[0];
+            ?>
             <article class="featured-card">
-              <img src="<?= e($featuredImages[$index]) ?>" alt="<?= e($item['name']) ?>" />
+              <img src="<?= e($featuredImage) ?>" alt="<?= e($item['name']) ?>" />
               <div class="featured-card-content">
                 <span class="badge badge-featured">
                   <?= e($index === 0 ? 'Chef Pick' : ($index === 1 ? 'Popular' : 'Guest Favorite')) ?>

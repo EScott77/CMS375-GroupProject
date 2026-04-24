@@ -27,13 +27,15 @@ $menuItems = db()->query(
    ORDER BY category, name'
 )->fetchAll();
 
-$menuCategories = [
-  'Appetizer',
-  'Main',
-  'Entree',
-  'Dessert',
-  'Drinks',
-];
+$allowedOrderTimes = [];
+for ($hour = 11; $hour <= 21; $hour++) {
+  $timeValue = sprintf('%02d:00', $hour);
+  $timeLabel = date('g:i A', strtotime($timeValue));
+  $allowedOrderTimes[] = [
+    'value' => $timeValue,
+    'label' => $timeLabel,
+  ];
+}
 
 function format_staff_time(string $timeValue): string {
   return date('g:i A', strtotime($timeValue));
@@ -52,7 +54,7 @@ function format_staff_time(string $timeValue): string {
     <section class="dashboard-header">
       <div>
         <p class="eyebrow">Staff Dashboard</p>
-        <h1>Operations for <?= e($user['name']) ?></h1>
+        <h1>Service operations for <?= e($user['name']) ?></h1>
       </div>
       <div class="dashboard-links">
         <?php if ($user['role'] === 'admin'): ?>
@@ -125,11 +127,11 @@ function format_staff_time(string $timeValue): string {
       </div>
     </section>
 
-    <section id="menu-editor" class="panel">
+    <section id="record-orders" class="panel">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Menu Editor</p>
-          <h2>Update or add menu items</h2>
+          <p class="eyebrow">Dish Orders</p>
+          <h2>Record dish orders for service</h2>
         </div>
       </div>
       <div class="grid dashboard-grid">
@@ -137,11 +139,10 @@ function format_staff_time(string $timeValue): string {
           <table>
             <thead>
               <tr>
-                <th>Item</th>
+                <th>Dish</th>
                 <th>Category</th>
                 <th>Price</th>
                 <th>Status</th>
-                <th>Remove</th>
               </tr>
             </thead>
             <tbody>
@@ -151,72 +152,53 @@ function format_staff_time(string $timeValue): string {
                   <td><?= e($item['category']) ?></td>
                   <td>$<?= e(number_format((float) $item['price'], 2)) ?></td>
                   <td><?= e(ucfirst($item['availability_status'])) ?></td>
-                  <td>
-                    <form method="post" action="staff_actions.php" onsubmit="return confirm('Remove this menu item?');">
-                      <input type="hidden" name="action" value="delete_menu" />
-                      <input type="hidden" name="menu_item_id" value="<?= e((string) $item['menu_item_id']) ?>" />
-                      <button type="submit" class="danger-button">Delete</button>
-                    </form>
-                  </td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
           </table>
         </div>
 
-        <form method="post" action="staff_actions.php" class="stack-form" id="menuEditorForm">
-          <input type="hidden" name="action" value="update_menu" />
+        <form method="post" action="staff_actions.php" class="stack-form">
+          <input type="hidden" name="action" value="record_order" />
           <label>
-            <span>Existing menu item (optional)</span>
-            <select name="menu_item_id" id="menu_item_id">
-              <option value="0">Create a new menu item</option>
+            <span>Dish</span>
+            <select name="menu_item_id" required>
+              <option value="">Select a menu item</option>
               <?php foreach ($menuItems as $item): ?>
-                <option
-                  value="<?= e((string) $item['menu_item_id']) ?>"
-                  data-name="<?= e($item['name']) ?>"
-                  data-description="<?= e($item['description']) ?>"
-                  data-price="<?= e(number_format((float) $item['price'], 2, '.', '')) ?>"
-                  data-category="<?= e($item['category']) ?>"
-                  data-status="<?= e($item['availability_status']) ?>"
-                >
+                <option value="<?= e((string) $item['menu_item_id']) ?>">
                   <?= e($item['name']) ?> (<?= e($item['category']) ?>)
                 </option>
               <?php endforeach; ?>
             </select>
           </label>
           <label>
-            <span>Name</span>
-            <input type="text" name="name" id="menu_name" required />
-          </label>
-          <label>
-            <span>Description</span>
-            <textarea name="description" id="menu_description" rows="4" required></textarea>
-          </label>
-          <label>
-            <span>Price</span>
-            <input type="number" name="price" id="menu_price" min="0.01" step="0.01" required />
-          </label>
-          <label>
-            <span>Category</span>
-            <select name="category" id="menu_category" required>
-              <option value="">Select a category</option>
-              <?php foreach ($menuCategories as $category): ?>
-                <option value="<?= e($category) ?>"><?= e($category) ?></option>
+            <span>Reservation ID (optional)</span>
+            <select name="reservation_id">
+              <option value="0">Walk-in / no reservation</option>
+              <?php foreach ($reservations as $reservation): ?>
+                <option value="<?= e((string) $reservation['reservation_id']) ?>">
+                  #<?= e((string) $reservation['reservation_id']) ?> - <?= e($reservation['customer_name']) ?>
+                </option>
               <?php endforeach; ?>
             </select>
           </label>
           <label>
-            <span>Status</span>
-            <select name="availability_status" id="menu_status">
-              <option value="available">Available</option>
-              <option value="unavailable">Unavailable</option>
+            <span>Quantity</span>
+            <input type="number" name="quantity" min="1" value="1" required />
+          </label>
+          <label>
+            <span>Ordered time</span>
+            <select name="ordered_time" required>
+              <option value="">Select a time</option>
+              <?php foreach ($allowedOrderTimes as $timeOption): ?>
+                <option value="<?= e($timeOption['value']) ?>"><?= e($timeOption['label']) ?></option>
+              <?php endforeach; ?>
             </select>
           </label>
-          <button type="submit">Save Menu Item</button>
+          <button type="submit">Record Order</button>
         </form>
       </div>
     </section>
   </main>
-  <script src="script.js"></script>
 </body>
 </html>
