@@ -83,18 +83,18 @@ The project includes insert, update, delete, and retrieve operations.
 Examples:
 
 - Insert
-  - create reservations in [reserve.php](/Users/escott/Desktop/CMS375-GroupProject/reserve.php)
-  - record dish orders in [staff_actions.php](/Users/escott/Desktop/CMS375-GroupProject/staff_actions.php)
-  - create staff accounts in [staff_actions.php](/Users/escott/Desktop/CMS375-GroupProject/staff_actions.php)
+  - create reservations in [reserve.php](/CMS375-GroupProject/reserve.php)
+  - record dish orders in [staff_actions.php](/CMS375-GroupProject/staff_actions.php)
+  - create staff accounts in [staff_actions.php](/CMS375-GroupProject/staff_actions.php)
 - Update
-  - confirm/cancel reservations and assign tables in [staff_actions.php](/Users/escott/Desktop/CMS375-GroupProject/staff_actions.php)
-  - edit menu items in [staff_actions.php](/Users/escott/Desktop/CMS375-GroupProject/staff_actions.php)
+  - confirm/cancel reservations and assign tables in [staff_actions.php](CMS375-GroupProject/staff_actions.php)
+  - edit menu items in [staff_actions.php](/CMS375-GroupProject/staff_actions.php)
 - Delete
-  - delete menu items in [staff_actions.php](/Users/escott/Desktop/CMS375-GroupProject/staff_actions.php)
+  - delete menu items in [staff_actions.php](CMS375-GroupProject/staff_actions.php)
 - Retrieve
-  - menu display in [index.php](/Users/escott/Desktop/CMS375-GroupProject/index.php) and [menu.php](/Users/escott/Desktop/CMS375-GroupProject/menu.php)
-  - reservation lookup in [index.php](/Users/escott/Desktop/CMS375-GroupProject/index.php)
-  - analytics in [admin.php](/Users/escott/Desktop/CMS375-GroupProject/admin.php)
+  - menu display in [index.php](CMS375-GroupProject/index.php) and [menu.php](/CMS375-GroupProject/menu.php)
+  - reservation lookup in [index.php](CMS375-GroupProject/index.php)
+  - analytics in [admin.php](/CMS375-GroupProject/admin.php)
 
 ## Security Notes
 
